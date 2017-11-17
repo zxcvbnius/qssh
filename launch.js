@@ -1,2 +1,2 @@
 require('babel-register')
-require('./ssh-connect.js')
+require('./qssh.js')
