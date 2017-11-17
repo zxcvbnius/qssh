@@ -1,5 +1,5 @@
 {
-  "name": "ssh-connect",
+  "name": "qssh",
   "version": "0.1.0",
   "description": "A package to allow one to store SSH connection information",
   "main": "qssh.js",
