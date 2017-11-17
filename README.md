@@ -1,7 +1,8 @@
-# ssh-connect
+# qssh
 A package to allow one to store SSH connection information and open on click
 
-## Build binary file
+# Build binary file
+
  - Git clone project
  - Run `npm install`
  - Install nexe, [See info](https://github.com/nexe/nexe)
