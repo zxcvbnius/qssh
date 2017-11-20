@@ -7,7 +7,7 @@ gulp.task('clean', () => {
 })
 
 gulp.task('compile-to-es5', () => {
-  return gulp.src('./ssh-connect.js')
+  return gulp.src('./qssh.js')
     .pipe( babel({ "presets": ["es2015"] }) )
     .pipe(gulp.dest('./dist'))
 })

@@ -9,8 +9,8 @@ const ver = '0.1.0'
 const log = console.log
 const pretty = (obj) => { return JSON.stringify(obj, null, 2) }
 
-const CONFIG_DIR      = path.resolve(`${process.env.HOME}/.ssh-connet`)
-const LIST_FILE_PATH  = path.resolve(`${CONFIG_DIR}/ssh-connect-list`)
+const CONFIG_DIR      = path.resolve(`${process.env.HOME}/.qssh`)
+const LIST_FILE_PATH  = path.resolve(`${CONFIG_DIR}/server-list`)
 
 const script_path = process.env.NODE_SCRIPT
 
@@ -34,7 +34,7 @@ parser.addArgument([ '-y', '--yes' ], {
 parser.addArgument([ '-p', '--ping' ], {
   nargs: '0',
   action: 'storeTrue',
-  help: 'test if ssh-connect works well'
+  help: 'test if qssh works well'
 })
 parser.addArgument(['--add' ], {
   nargs: '0',
@@ -54,7 +54,7 @@ const args = parser.parseArgs()
 if(args.ping) { // ssh-connet --ping
   log('PONG')
   process.exit(0)
-} else if(args.add) { // ssh-connect --add
+} else if(args.add) { // qssh --add
   const obj = JSON.parse(fs.readFileSync(LIST_FILE_PATH, 'utf8')) // XXX: race condition if multiple contributors to edit
   prompt([
     {
