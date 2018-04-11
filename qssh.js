@@ -5,7 +5,7 @@ import {exec}     from 'child_process'
 import {prompt, Separator} from 'inquirer'
 import {ArgumentParser}    from 'argparse'
 
-const ver = '1.0.0'
+const ver = '1.0.1'
 const log = console.log
 const pretty = (obj) => { return JSON.stringify(obj, null, 2) }
 

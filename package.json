@@ -1,6 +1,6 @@
 {
   "name": "qssh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A command tool to help user find ssh servers easier",
   "main": "qssh.js",
   "scripts": {
