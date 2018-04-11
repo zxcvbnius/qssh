@@ -5,7 +5,7 @@ import {exec}     from 'child_process'
 import {prompt, Separator} from 'inquirer'
 import {ArgumentParser}    from 'argparse'
 
-const ver = '0.1.0'
+const ver = '1.0.0'
 const log = console.log
 const pretty = (obj) => { return JSON.stringify(obj, null, 2) }
 
@@ -46,7 +46,7 @@ if(!fs.existsSync(CONFIG_DIR)) {
   fs.mkdirSync(CONFIG_DIR, '0755')
 }
 if(!fs.existsSync(LIST_FILE_PATH)) {
-  const obj = {'Development': [], 'Stagging': [], 'Production': []}
+  const obj = {'Development': [], 'Staging': [], 'Production': []}
   fs.writeFileSync(LIST_FILE_PATH, pretty(obj), 'utf8')
 }
 
@@ -105,14 +105,14 @@ if(args.ping) { // ssh-connet --ping
   })
   process.exit(0)
 } else {    // connect
-  let selection = {}, servers = []
+  let server = {}, servers = []
   const obj = JSON.parse(fs.readFileSync(LIST_FILE_PATH, 'utf8'))
   const types = _.keys(obj)
   const items = []
   _.forEach(types, (t) => {
     items.push(new Separator(`${t} Server`))
     _.forEach(obj[t], s => {
-      items.push(s.name)
+      items.push(s)
       servers.push(_.merge(s, {type: t}))
     })
     items.push(new Separator('\t'))
@@ -126,8 +126,7 @@ if(args.ping) { // ssh-connet --ping
       pageSize: items.length
     }
   ]).then((res) => {
-    selection.name = res.name
-    selection.url = _.find(servers, {name: res.name}).value
+    server = _.find(servers, {value: res.name}) // XXX: kind of hack here
     return prompt([
       {
         when: () => {
@@ -135,7 +134,7 @@ if(args.ping) { // ssh-connet --ping
         },
         type: 'confirm',
         name: 'confirm',
-        message: `Do you want to connect to "${selection.name} (${selection.url})"`,
+        message: `Do you want to connect to "${server.name} (${server.value})"`,
         default: 'Yes'
       }
     ])
@@ -143,14 +142,12 @@ if(args.ping) { // ssh-connet --ping
     if(!args.yes && !res.confirm) {
       process.exit(1)
     }
-    const s = _.find(servers, {'name': selection.name})
-
-    exec(`echo "ssh -i ${s.private_key}  -o StrictHostKeyChecking=no ${s.value}" > ${script_path}`, (err, stdout, stderr) => {
+    exec(`echo "ssh -i ${server.private_key}  -o StrictHostKeyChecking=no ${server.value}" > ${script_path}`, (err, stdout, stderr) => {
       if(err) {
         log(err)
         process.exit(1)
       }
-      log('Connect to', s.value)
+      log('Connect to', server.value)
     })
   })
 }
